@@ -5,27 +5,41 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private bool isGrounded;
-    private bool hasJumped;
-    private bool isDashing;
-    private bool facingRight;
-    private bool hasDoubleJumped;
+    private bool isGrounded; // Whether the player is on the ground
+    private bool hasJumped; // Whether the player has already jumped
+    private bool isDashing; // Whether the player is currently dashing
+    private bool facingRight; // Whether the player is facing right
+    private bool hasDoubleJumped; // Whether the player has already done a double jump
 
-    private int framesSinceDirectionChange = 0;
-    public int skidFrames = 15;
-    public float skidToStopMultiplierRelease = 0.5f;
-    public float skidToStopMultiplierSwap = 0.1f;
-    public float speedUpRate = 0.2f;
-    public float slowDownRate = 0.5f;
+    private int framesSinceDirectionChange = 0; // The number of frames since the player changed direction
+    public int skidFrames = 15; // The number of frames the player should slide before stopping
+    public float skidToStopMultiplierRelease = 0.5f; // The slowdown multiplier when the player releases a direction key
+    public float skidToStopMultiplierSwap = 0.1f; // The slowdown multiplier when the player swaps direction
+    public float speedUpRate = 0.2f; // The rate at which the player's speed increases
+    public float slowDownRate = 0.5f; // The rate at which the player slows down
+    public LayerMask wallLayer;
+    public float wallDistance = 0.2f;
 
-    public float moveSpeed;
-    public float jumpForce;
-    public float dashDistance;
+    public GameObject horizontalAttackPrefab; // The prefab for the horizontal attack
+    public GameObject verticalAttackPrefab; // The prefab for the vertical attack
+    public float attackCooldown = 0.5f; // The cooldown for attacks
+    public int attackDurationFrames = 10; // The number of frames an attack should last
+    private float attackTimer; // The amount of time left before the player can attack again
 
-    public float jumpTime = 0.25f;
-    public float jumpTimeCounter;
-    public bool isJumping;
-    public float jumpTimeMultiplier = 2f;
+    public GameObject spellPrefab; // The prefab for the spell
+    public float spellCooldown = 1.0f; // The cooldown for spells
+    public float spellSpeed = 5.0f; // The speed of the spell
+    public float spellDuration = 2.0f; // The duration of the spell
+    private float spellTimer; // The amount of time left before the player can cast another spell
+
+    public float moveSpeed; // The player's movement speed
+    public float jumpForce; // The force of the player's jump
+    public float dashDistance; // The distance the player should dash
+
+    public float jumpTime = 0.25f; // The time the player can hold down the jump key for a higher jump
+    public float jumpTimeCounter; // The amount of time left that the player can hold down the jump key for a higher jump
+    public bool isJumping; // Whether the player is currently jumping
+    public float jumpTimeMultiplier = 2f; // The amount the jump force is multiplied by when the player holds down the jump key for a higher jump
 
     void Awake()
     {
@@ -42,6 +56,9 @@ public class PlayerController : MonoBehaviour
         Spell(); // Spawn spell sprite that moves in direction player is facing (needs to adjust for various builds, but we'll start with a basic blast)
     }
 
+
+
+
     // ----------------------   Movement Based Code   ---------------------- //
 
     void Move()
@@ -55,19 +72,25 @@ public class PlayerController : MonoBehaviour
             {
                 // Player has swapped direction, use faster slow down time
                 rb.velocity = new Vector2(rb.velocity.x * skidToStopMultiplierSwap, rb.velocity.y);
+
+                // Reset frame counter
                 framesSinceDirectionChange = 0;
             }
             else if (moveInput == 0 && isGrounded)
             {
                 // Player has released direction, use slower slow down time
                 rb.velocity = new Vector2(rb.velocity.x * skidToStopMultiplierRelease, rb.velocity.y);
+
+                // Reset frame counter
                 framesSinceDirectionChange = 0;
             }
             else
             {
+                // Increment frame counter
                 framesSinceDirectionChange++;
             }
 
+            // Flip player if necessary
             if (moveInput > 0 && !facingRight)
             {
                 Flip();
@@ -86,25 +109,35 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(Mathf.MoveTowards(rb.velocity.x, targetVelocityX, slowDownRate), rb.velocity.y);
             }
+
+            // Check for wall collision
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * moveInput, wallDistance, wallLayer);
+            if (hit.collider != null)
+            {
+                rb.velocity = new Vector2(0f, rb.velocity.y);
+            }
         }
     }
 
     void Jump()
     {
-        if (Input.GetButtonDown("Jump") && !hasJumped) // Only allow jump if player hasn't jumped yet
+        if (Input.GetButtonDown("Jump") && !hasJumped) // Check if the player has pressed the jump button and hasn't already jumped
         {
+            // Apply initial jump velocity to the rigidbody and set up the jump time counter
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpTimeCounter = jumpTime;
             hasJumped = true;
         }
 
-        if (Input.GetButton("Jump") && jumpTimeCounter > 0 && hasJumped)
+        if (Input.GetButton("Jump") && jumpTimeCounter > 0 && hasJumped) // If the player is holding down the jump button and the jump time counter hasn't run out
         {
+            // Apply an additional jump force to the rigidbody, and decrement the jump time counter
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * jumpTimeMultiplier);
             jumpTimeCounter -= Time.deltaTime;
         }
         else
         {
+            // If the player has stopped holding down the jump button, or the jump time counter has run out, reset the jump time counter
             jumpTimeCounter = 0;
         }
     }
@@ -113,20 +146,24 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetButtonDown("Dash") && !isDashing)
         {
+            // Check if the player is currently touching a wall
+            bool isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1.0f : -1.0f), wallDistance, wallLayer);
+
+            // Determine the direction the player should dash based on input or wall touch
+            float dashDirection = isTouchingWall ? -(facingRight ? 1.0f : -1.0f) : Input.GetAxisRaw("Horizontal");
+
             // Start dashing
             isDashing = true;
 
             // Stop all motion
             rb.velocity = Vector2.zero;
 
-            // Determine the direction the player should dash based on input
-            float dashDirection = facingRight ? 1.0f : -1.0f;
-
-            // Move horizontally in the direction the player was facing for a set distance
+            // Move horizontally in the direction the player was facing or the opposite direction of the wall they are touching
             StartCoroutine(DoDash(dashDirection));
         }
     }
 
+    // This is a coroutine that handles the dash action, by effecting motion while regular movement is suspended.
     private IEnumerator DoDash(float dashDirection)
     {
         float distanceTraveled = 0;
@@ -148,11 +185,11 @@ public class PlayerController : MonoBehaviour
 
     void DoubleJump()
     {
-        if (Input.GetButtonDown("Jump") && !hasDoubleJumped && !isGrounded) // Only allow jump if player hasn't jumped yet
+        if (Input.GetButtonDown("Jump") && !hasDoubleJumped && !isGrounded) // Check if the player is performing a double jump
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             jumpTimeCounter = jumpTime;
-            hasDoubleJumped = true;
+            hasDoubleJumped = true; // Mark that the player has used the double jump
         }
 
         if (Input.GetButton("Jump") && jumpTimeCounter > 0 && hasJumped)
@@ -167,19 +204,75 @@ public class PlayerController : MonoBehaviour
     }
 
 
+
+
     // ----------------------   Action Based Code   ---------------------- //
 
 
     void Attack()
     {
+        // Check if the player has pressed the attack button and if the attack is off cooldown
+        if (Input.GetButtonDown("Attack") && attackTimer >= attackCooldown)
+        {
+            attackTimer = 0;
 
+            GameObject attackInstance;
+
+            // Determine the direction of the attack based on whether the player is pressing up, down, or left/right
+            if (Input.GetAxisRaw("Vertical") > 0) // Up
+            {
+                attackInstance = Instantiate(verticalAttackPrefab, transform.position + Vector3.up, Quaternion.identity, transform);
+                StartCoroutine(DestroyAfterFrames(attackInstance, attackDurationFrames));
+            }
+            else if (Input.GetAxisRaw("Vertical") < 0) // Down
+            {
+                attackInstance = Instantiate(verticalAttackPrefab, transform.position + Vector3.down, Quaternion.identity, transform);
+                StartCoroutine(DestroyAfterFrames(attackInstance, attackDurationFrames));
+            }
+            else // Horizontal
+            {
+                Vector3 offset = facingRight ? Vector3.right : Vector3.left;
+                attackInstance = Instantiate(horizontalAttackPrefab, transform.position + offset, Quaternion.identity, transform);
+                StartCoroutine(DestroyAfterFrames(attackInstance, attackDurationFrames));
+            }
+        }
+
+        // Increment the attack timer
+        attackTimer += Time.deltaTime;
     }
 
 
     void Spell()
     {
+        // Check if the player has pressed the spell button and if the spell is off cooldown
+        if (Input.GetButtonDown("Spell") && spellTimer <= 0)
+        {
+            // Spawn the spell prefab at the player's position
+            GameObject spellObject = Instantiate(spellPrefab, transform.position, Quaternion.identity);
 
+            // Determine the direction the spell should travel based on player facing
+            int spellDirection = facingRight ? 1 : -1;
+
+            // Set the spell's initial velocity to move in the direction the player is facing
+            Rigidbody2D spellRB = spellObject.GetComponent<Rigidbody2D>();
+            spellRB.velocity = new Vector2(spellSpeed * spellDirection, 0);
+
+            // Set the spell's despawn timer
+            Destroy(spellObject, spellDuration);
+
+            // Start the spell cooldown
+            spellTimer = spellCooldown;
+        }
+
+        if (spellTimer > 0)
+        {
+            // Decrease spell timer
+            spellTimer -= Time.deltaTime;
+        }
     }
+
+
+
 
     // ----------------------   Detection Based Code   ---------------------- //
 
@@ -203,7 +296,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ----------------------   Animation Based Code   ---------------------- //
+
+
+
+    // ----------------------   Animation/DespawnAttacks Based Code   ---------------------- //
 
     void Flip()
     {
@@ -218,5 +314,15 @@ public class PlayerController : MonoBehaviour
 
         // Set the local scale of the player sprite to the new value
         transform.localScale = scale;
+    }
+
+    // This is a coroutine that destroys a game object after a certain number of frames.
+    private IEnumerator DestroyAfterFrames(GameObject obj, int frames)
+    {
+        // Wait for the specified number of frames before destroying the object.
+        yield return new WaitForSeconds(frames * Time.deltaTime);
+
+        // Destroy the object.
+        Destroy(obj);
     }
 }
