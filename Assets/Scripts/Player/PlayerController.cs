@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     private Rigidbody2D rb;
     private bool isGrounded; // Whether the player is on the ground
     private bool hasJumped; // Whether the player has already jumped
@@ -48,6 +50,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Instance = this;
+
         Move(); // Left/right movement
         Jump(); // Vertical jump
         Dash(); // Stop all vertical movement and quickly move in a direction the player is facing (needs to be an unlock)
