@@ -129,8 +129,6 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator AttackCoroutine()
     {
-        Debug.Log("AttackCoroutine called.");
-
         // Get the EnemyAttackController component from the attack object
         EnemyAttackController enemyAttackController = attackObject.GetComponent<EnemyAttackController>();
 

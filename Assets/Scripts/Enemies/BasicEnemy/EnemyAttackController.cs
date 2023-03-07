@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAttackController : MonoBehaviour
 {
-    // [SerializeField] private float damage = 10f;
+    [SerializeField] private int damage = 1;
     [SerializeField] private float attackDuration = 0.5f;
 
     private bool isAttacking = false;
@@ -33,8 +33,12 @@ public class EnemyAttackController : MonoBehaviour
     {
         if (isAttacking && collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Player has been hit.");
-            // PlayerController.Instance.TakeDamage(damage);
+            PlayerStats playerStats = collision.gameObject.GetComponent<PlayerStats>();
+            if (playerStats != null && !playerStats.isInvulnerable)
+            {
+                playerStats.DamagePlayer(damage);
+                Debug.Log("Player has been hit.");
+            }
         }
     }
 
