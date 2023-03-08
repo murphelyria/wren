@@ -1,0 +1,13 @@
+- Currently have setup functionality for:
+	- Movement
+		- Standard
+			- Moves at a slower speed when just idly walking around
+		- Sprint
+			- If it spots the player, it will sprint towards them
+		- Player Detection
+			- Has a further detection range in front than behind to simulate the difference between seeing the player and hearing the player behind them
+	- Attacking
+		- After spring towards the player, the enemy will stop for a moment before spawning an AttackPrefab in front of itself (need to cleanup, some of the code is redundant now that I am using project prefabs rather than my earlier implementation where I had the attack prefabs as children of the enemy and player game objects)
+- Any other code not mentioned here is to support the features mentioned above. Check the code for more detailed notes (yet to be fully implemented, working on it).
+
+- Another thing that I'll mention here and not in a seperate note is the EnemyAttackController, which handles dealing damage to the player based on collision with EnemyAttackPrefab

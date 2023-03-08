@@ -1,0 +1,12 @@
+{
+  "obsidian-kanban:create-new-kanban-board": [
+    {
+      "modifiers": [
+        "Ctrl",
+        "Mod",
+        "Shift"
+      ],
+      "key": "B"
+    }
+  ]
+}
