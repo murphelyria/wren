@@ -13,8 +13,9 @@ public class PlayerSpellController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        int damage = playerStats.playerSpellDamage;
+        int damage = playerStats.playerSpellDamage; // defines spell damage from PlayerStats
 
+        // Applies damage when SpellPrefab collides with any enemy
         if (collision.gameObject.CompareTag("Enemies"))
         {
             EnemyStats enemyStats = collision.gameObject.GetComponent<EnemyStats>();

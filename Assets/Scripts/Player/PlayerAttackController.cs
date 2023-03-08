@@ -13,8 +13,9 @@ public class PlayerAttackController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        int damage = playerStats.playerAttackDamage;
+        int damage = playerStats.playerAttackDamage; // define damage based on stats in PlayerStats
 
+        // If AttackPrefab interacts with any enemy, deal damage to them
         if (collision.gameObject.CompareTag("Enemies"))
         {
             EnemyStats enemyStats = collision.gameObject.GetComponent<EnemyStats>();

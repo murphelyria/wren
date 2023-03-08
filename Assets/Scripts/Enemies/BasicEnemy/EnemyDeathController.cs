@@ -26,7 +26,7 @@ public class EnemyDeathController : MonoBehaviour
     private void Despawn()
     {
         // Start the death despawn animation
-        //animator.SetTrigger("deathDespawn");
+        // animator.SetTrigger("deathDespawn");
         // Destroy the game object after the animation finishes
         Invoke("DestroyGameObject", 1f);
     }
