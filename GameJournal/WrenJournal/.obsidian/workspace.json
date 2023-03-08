@@ -1,0 +1,160 @@
+{
+  "main": {
+    "id": "e29200f89f8e153b",
+    "type": "split",
+    "children": [
+      {
+        "id": "d9bca6184a0ed471",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0a3c955c1088660a",
+            "type": "leaf",
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "Quick Notes.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5aa9729ac6e250c3",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c5624b3857976b8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "10c3f50b9691d59b",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "064cb283aca3422d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "e71152a8594cc706",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0af6247b2a8abcae",
+    "type": "split",
+    "children": [
+      {
+        "id": "c34a118cf3760c7c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4f16530a6e71d55c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Quick Notes.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d22abfd980535f72",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Quick Notes.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "145a49e86f4f77ff",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "46c93ef3a3865ff5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Quick Notes.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "0a3c955c1088660a",
+  "lastOpenFiles": [
+    "Notes/Enemies/Type 1/Controller.md",
+    "Quick Notes.md",
+    "Notes/Enemies/Type 1/Statistics.md",
+    "Notes/Enemies/Type 1/Death Controller.md",
+    "Notes/Player/Statistics.md",
+    "Notes/Enemies/Type 1/Character.md",
+    "Notes/Player/Controller.md",
+    "Notes/Player/Character.md",
+    "Notes/Player/UI.md",
+    "Lore Bible/Wren.md"
+  ]
+}

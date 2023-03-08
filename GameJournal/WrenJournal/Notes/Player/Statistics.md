@@ -1,0 +1,16 @@
+- Handles Damage dealt to player, invulnerability timings, regaining mana, and all public values that will be changed by either damage, spell use or upgrades (with some exceptions, but they are not implemented yet, just conceptualised)
+
+- Statistics currently implemented:
+	- Health
+	- MaxHealth
+	- AttackDamage
+	- SpellDamage
+	- Mana
+	- MaxMana
+	- ManaRegainRate
+	- InvulnerabilityTime
+	- HealAmount
+	- SpellManaCost
+		- Defined seperately for future upgrade functionality
+	- HealManaCost
+		- Defined seperately for future upgrade functionality

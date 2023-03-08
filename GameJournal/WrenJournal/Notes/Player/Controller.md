@@ -1,0 +1,22 @@
+- Currently have setup functionality for:
+	- Movement
+		- Movement is constant-ish, there is a small speedup into movement, barely perceptible, and a small slowdown which can also be cancelled to quickly swap directions keeping speed
+		- Movement also handles wall collision
+	- Jumping
+		- Technically this is supposed to change player jump height based on how long the button has been held down, due to the way the Rigidbody 2D is setup, it's a bit wonky, and the values are off the walls bonkers
+	- Dashing
+		- I'm very proud of this one, this interacts with the movement code to stop movement then uses a coroutine to move the player, its very basic but made me feel really smart when I figured it out
+		- Also relies on the movement code to define if the player is touching a wall, where it will instead dash opposite to the wall
+	- Double Jumping
+		- Pretty simple stuff, basically just the Jump() function with inverse conditionals for grounded calculations
+	- Attacking
+		- The easier of the two action based code features, spawns an attackPrefab (which is now an actual prefab, yay!!!) based on the direction the player is looking, the timings are still wrong on this at the moment, but we'll polish those when we get around to the animator
+	- Spell
+		- Attacking
+			- Spawns a spell prefab (also now an actual prefab) which moves out horizontally based on the direction the player is faced
+		- Healing
+			- If the spell button is held long enough, the player doesn't spawn a spellAttackPrefab, but instead starts a coroutine that drains the player's mana over time and activates a heal
+			- This needs to be cleaned up a bit more, I want the healing to stop the player from moving while the button is being held down and right now this just slowly decreases mana regardless of if the button is held down
+- Remainder of code not mentioned is to support above features. Consult code for more detailed notes.
+
+- Another thing that I'll mention here and not in a seperate note is the PlayerAttackController and PlayerSpellController, which handle dealing damage to enemies based on collision with AttackPrefab and SpellPrefab (named before healing implementation, code cleanup will come later)

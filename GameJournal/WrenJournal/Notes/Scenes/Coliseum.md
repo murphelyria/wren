@@ -1,0 +1,5 @@
+- Setup our basic scene, the coliseum where most of the game will take place
+- General parents object for this is currently called "Environment"
+- Preset parent objects for Ground, Walls, Platforms, and Background
+	- Did this to allow for easy adjustments to layer/tag features, any seperate items within said parent objects have individual Box Collider 2Ds, background of course having none
+- Want to get some proper graphics in here but that will come way later

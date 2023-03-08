@@ -1,0 +1,1 @@
+- This will require a lot of work later on once we get animation implementation across the board, but for now, this applies knockback on death and then despawns after a period of time, when animation is implemented, timings will need to be adjusted, animation code is commented out for the moment to prevent compilation errors

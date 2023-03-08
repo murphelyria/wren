@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
 
     private Rigidbody2D rb;
+    public PlayerStats playerStats;
     private bool isGrounded; // Whether the player is on the ground
     private bool hasJumped; // Whether the player has already jumped
     private bool isDashing; // Whether the player is currently dashing
@@ -34,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public float spellDuration = 2.0f; // The duration of the spell
     private float spellTimer; // The amount of time left before the player can cast another spell
 
+    public float healThreshold = 0.7f;
+    public float manaDrainRate = 16.5f;
+
     public float moveSpeed; // The player's movement speed
     public float jumpForce; // The force of the player's jump
     public float dashDistance; // The distance the player should dash
@@ -46,6 +50,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>(); // Calls interactions from Rigidbody2D component for platform/ground interactions
+        playerStats = GetComponent<PlayerStats>(); // get the reference to the PlayerStats component of the player game object
     }
 
     void Update()
@@ -154,7 +159,19 @@ public class PlayerController : MonoBehaviour
             bool isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1.0f : -1.0f), wallDistance, wallLayer);
 
             // Determine the direction the player should dash based on input or wall touch
-            float dashDirection = isTouchingWall ? -(facingRight ? 1.0f : -1.0f) : Input.GetAxisRaw("Horizontal");
+            float dashDirection;
+            if (isTouchingWall)
+            {
+                dashDirection = -(facingRight ? 1.0f : -1.0f);
+            }
+            else if (Input.GetAxisRaw("Horizontal") != 0.0f)
+            {
+                dashDirection = Input.GetAxisRaw("Horizontal");
+            }
+            else
+            {
+                dashDirection = facingRight ? 1.0f : -1.0f;
+            }
 
             // Start dashing
             isDashing = true;
@@ -165,7 +182,7 @@ public class PlayerController : MonoBehaviour
             // Move horizontally in the direction the player was facing or the opposite direction of the wall they are touching
             StartCoroutine(DoDash(dashDirection));
         }
-    }
+    } 
 
     // This is a coroutine that handles the dash action, by effecting motion while regular movement is suspended.
     private IEnumerator DoDash(float dashDirection)
@@ -245,11 +262,44 @@ public class PlayerController : MonoBehaviour
         attackTimer += Time.deltaTime;
     }
 
-
     void Spell()
     {
         // Check if the player has pressed the spell button and if the spell is off cooldown
-        if (Input.GetButtonDown("Spell") && spellTimer <= 0)
+        if (Input.GetButtonDown("Spell") && spellTimer <= 0 && playerStats.playerMana >= 33)
+        {
+            StartCoroutine(CastSpell());
+        }
+        else if (Input.GetButtonDown("Spell") && spellTimer <= 0 && playerStats.playerMana < 33)
+        {
+            Debug.Log("Player doesn't have enough mana.");
+        }
+
+        if (spellTimer > 0)
+        {
+            // Decrease spell timer
+            spellTimer -= Time.deltaTime;
+        }
+    }
+
+    IEnumerator CastSpell()
+    {
+        // Determine how long the spell button has been held down
+        float spellHoldTime = 0f;
+        while (Input.GetButton("Spell") && spellHoldTime < healThreshold)
+        {
+            spellHoldTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if (spellHoldTime >= healThreshold)
+        {
+            // Start the drain over time coroutine
+            yield return StartCoroutine(DrainManaOverTime(playerStats));
+
+            // Start the spell cooldown
+            spellTimer = spellCooldown;
+        }
+        else
         {
             // Spawn the spell prefab at the player's position
             GameObject spellObject = Instantiate(spellPrefab, transform.position, Quaternion.identity);
@@ -266,13 +316,39 @@ public class PlayerController : MonoBehaviour
 
             // Start the spell cooldown
             spellTimer = spellCooldown;
+
+            // Drain mana for the spell
+            playerStats.playerMana -= playerStats.spellManaCost;
+        }
+    }
+
+    IEnumerator DrainManaOverTime(PlayerStats playerStats)
+    {
+        // Initialize variables for mana draining
+        float manaDrained = 0f;
+        float newManaValue = playerStats.playerMana;
+
+        // Continue draining mana until the required amount has been drained
+        while (manaDrained < playerStats.spellManaCost)
+        {
+            // Calculate the new mana value based on the current rate of mana drain
+            newManaValue -= manaDrainRate * Time.deltaTime;
+
+            // Track the total amount of mana drained
+            manaDrained += manaDrainRate * Time.deltaTime;
+
+            // Update the player's mana value
+            playerStats.playerMana = newManaValue;
+
+            // Wait for the next frame
+            yield return null;
         }
 
-        if (spellTimer > 0)
-        {
-            // Decrease spell timer
-            spellTimer -= Time.deltaTime;
-        }
+        // Round the final mana value to an integer
+        playerStats.playerMana = Mathf.RoundToInt(newManaValue);
+
+        // Heal the player
+        playerStats.HealPlayer();
     }
 
 
@@ -303,7 +379,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    // ----------------------   Animation/DespawnAttacks Based Code   ---------------------- //
+    // ----------------------   Misc. Functions Code   ---------------------- //
 
     void Flip()
     {
