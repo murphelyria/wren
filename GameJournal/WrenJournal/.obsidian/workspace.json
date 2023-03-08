@@ -11,9 +11,11 @@
             "id": "0a3c955c1088660a",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "markdown",
               "state": {
-                "file": "Quick Notes.md"
+                "file": "Projects/Add Different Enemy Types.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -83,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Quick Notes.md",
+                "file": "Projects/Add Different Enemy Types.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -100,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Quick Notes.md",
+                "file": "Projects/Add Different Enemy Types.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -123,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Quick Notes.md"
+                "file": "Projects/Add Different Enemy Types.md"
               }
             }
           }
@@ -144,10 +146,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0a3c955c1088660a",
+  "active": "10c3f50b9691d59b",
   "lastOpenFiles": [
-    "Notes/Enemies/Type 1/Controller.md",
+    "Projects",
     "Quick Notes.md",
+    "Projects/Add Different Enemy Types.md",
+    "Notes/Enemies/Type 1/Controller.md",
     "Notes/Enemies/Type 1/Statistics.md",
     "Notes/Enemies/Type 1/Death Controller.md",
     "Notes/Player/Statistics.md",

@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class Sw_EnemyController : MonoBehaviour
 {
     // Declare a static instance of the enemy controller
-    public static EnemyController Instance;
+    public static Sw_EnemyController Instance;
 
     // Declare various public variables that can be set in the Unity inspector
     [SerializeField] private float moveSpeed = 2f;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttackController : MonoBehaviour
+public class Sw_EnemyAttackController : MonoBehaviour
 {
     [SerializeField] private int damage = 1; // damage that the enemy's attack will do to the player
     [SerializeField] private float attackDuration = 0.5f; // duration of the enemy's attack

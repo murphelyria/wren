@@ -1,0 +1,6 @@
+- Need to create more enemy types
+	- Charge_type
+	- Archer_type
+	- Whip_type
+	- Slam_type
+	- Change BasicEnemy to Sword_type (make a new one so BasicEnemy code can be duped and adjusted where needed)

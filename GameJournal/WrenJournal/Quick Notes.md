@@ -13,10 +13,10 @@ kanban-plugin: basic
 
 - [ ] [[Notes/Player/Character | Player - Character]]
 - [ ] [[Notes/Enemies/Type 1/Character | Enemy - Type1 Character]]
-- [ ] Properly comment notes to Enemy Controller
-- [ ] Add Different Enemy Types
+- [ ] [[Add Different Enemy Types]]
 - [ ] Upgrade Tree
 - [ ] Contact "leaving out name for privacy purposes" about doing art for the game
+- [ ] Enemy Spawning Code
 
 
 ## Current Features

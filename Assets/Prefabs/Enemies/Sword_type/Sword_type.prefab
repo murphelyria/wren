@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1684641044237568655
+--- !u!1 &4238029988852861376
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6368231236983468366}
-  - component: {fileID: 5993109653096679966}
-  - component: {fileID: 5993109653096679969}
-  - component: {fileID: 5993109653096679971}
-  - component: {fileID: 5993109653096679970}
-  - component: {fileID: 5993109653096679968}
-  m_Layer: 12
-  m_Name: PlayerCharacter
-  m_TagString: Player
+  - component: {fileID: 8617503706166646581}
+  - component: {fileID: 162951727457288009}
+  - component: {fileID: 3178298734493008679}
+  - component: {fileID: 2219734732688919718}
+  - component: {fileID: 491096703916284282}
+  - component: {fileID: 3911346919608239502}
+  m_Layer: 0
+  m_Name: Sword_type
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6368231236983468366
+--- !u!4 &8617503706166646581
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5993109653096679966
+--- !u!212 &162951727457288009
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -78,44 +78,44 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.6415094, g: 0, b: 0.036895894, a: 1}
+  m_Color: {r: 0, g: 0.3962264, b: 0.18506683, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &5993109653096679969
+--- !u!50 &3178298734493008679
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 10
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &5993109653096679971
+--- !u!61 &2219734732688919718
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -127,7 +127,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 2}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -135,65 +135,39 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &5993109653096679970
+--- !u!114 &491096703916284282
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 651ee4734dd214514b103c370de472a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 0409f7e660874a8419c364316cbecdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 5993109653096679968}
-  skidFrames: 15
-  skidToStopMultiplierRelease: 0.8
-  skidToStopMultiplierSwap: 0.5
-  speedUpRate: 0.4
-  slowDownRate: 0.5
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  wallDistance: 0.6
-  horizontalAttackPrefab: {fileID: 840698321481907621, guid: cdc3e9ce2cac14300a159a8d40033119, type: 3}
-  verticalAttackPrefab: {fileID: 7568561135373622896, guid: 26714f53eae514812a2d9f2c6abadd86, type: 3}
-  attackCooldown: 0.47
-  attackDurationFrames: 40
-  spellPrefab: {fileID: 433508445651467226, guid: a48ca013a27fe4c459def68ff4a31fb1, type: 3}
-  spellCooldown: 0.46
-  spellSpeed: 40
-  spellDuration: 0.6
-  healThreshold: 0.7
-  manaDrainRate: 16.5
-  moveSpeed: 12
-  jumpForce: 1.5
-  dashDistance: 2000
-  jumpTime: 0.25
-  jumpTimeCounter: 0
-  isJumping: 0
-  jumpTimeMultiplier: 6.49
---- !u!114 &5993109653096679968
+  moveSpeed: 2
+  sprintSpeed: 5
+  detectionDistanceFront: 8
+  detectionDistanceBack: 3
+  attackDistance: 1
+  attackPrefab: {fileID: 5509171450414152552, guid: 920c5381cd31af64e859c526f5175881, type: 3}
+  preAttackDelay: 0.62
+  attackCooldown: 1
+--- !u!114 &3911346919608239502
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684641044237568655}
+  m_GameObject: {fileID: 4238029988852861376}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f9ec9b5fba194caf82a47466998b48b, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f4344e19a0dc7c4d90f5b4f67b5d8a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: 5
-  playerMaxHealth: 5
-  playerAttackDamage: 5
-  playerSpellDamage: 15
-  playerMana: 99
-  playerMaxMana: 99
-  manaRegainRate: 3.3
-  invulnerabilityTime: 3
+  enemyHealth: 15
+  enemyMaxHealth: 15
+  invulnerabilityTime: 2
   isInvulnerable: 0
-  spellManaCost: 33
-  healManaCost: 33
