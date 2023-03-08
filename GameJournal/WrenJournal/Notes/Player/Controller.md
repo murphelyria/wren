@@ -1,0 +1,11 @@
+- Currently have setup functionality for:
+	- Movement
+		- Movement is constant-ish, there is a small speedup into movement, barely perceptible, and a small slowdown which can also be cancelled to quickly swap directions keeping speed
+		- Movement also handles wall collision
+	- Jumping
+		- 
+	- Dashing
+	- Double Jumping
+	- Attacking
+	- Spell Attacking
+- Consult code for more detailed notes

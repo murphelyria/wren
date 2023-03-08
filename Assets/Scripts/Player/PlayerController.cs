@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
 
     private Rigidbody2D rb;
-    private PlayerStats playerStats;
+    public PlayerStats playerStats;
     private bool isGrounded; // Whether the player is on the ground
     private bool hasJumped; // Whether the player has already jumped
     private bool isDashing; // Whether the player is currently dashing
@@ -34,11 +34,9 @@ public class PlayerController : MonoBehaviour
     public float spellSpeed = 5.0f; // The speed of the spell
     public float spellDuration = 2.0f; // The duration of the spell
     private float spellTimer; // The amount of time left before the player can cast another spell
-    private float spellButtonDownTime;
 
-    public float healHoldDuration = 0.5f;
-    private float healDuration = 2f;
-    private float healButtonDownTime;
+    public float healThreshold = 0.7f;
+    public float manaDrainRate = 16.5f;
 
     public float moveSpeed; // The player's movement speed
     public float jumpForce; // The force of the player's jump
@@ -161,7 +159,7 @@ public class PlayerController : MonoBehaviour
             bool isTouchingWall = Physics2D.Raycast(transform.position, Vector2.right * (facingRight ? 1.0f : -1.0f), wallDistance, wallLayer);
 
             // Determine the direction the player should dash based on input or wall touch
-            float dashDirection = 0.0f;
+            float dashDirection;
             if (isTouchingWall)
             {
                 dashDirection = -(facingRight ? 1.0f : -1.0f);
@@ -264,118 +262,16 @@ public class PlayerController : MonoBehaviour
         attackTimer += Time.deltaTime;
     }
 
-    // Original Spell Code (broken)
-    /* void Spell()
-    {
-        // Check if the player has pressed the spell button and if the spell is off cooldown
-        if (Input.GetButtonDown("Spell"))
-        {
-            if (healHoldTime <= healHoldDuration) // handles how long the player has held the spell button for determining whether the player casts a spell or heals
-            {
-                healHoldTime += Time.unscaledDeltaTime;
-            }
-
-            if (Input.GetButtonUp("Spell") && healHoldTime < healHoldDuration)
-            {
-                if (playerStats.playerMana >= 33)
-                {
-                    // Subtract the spell mana cost from player mana
-                    playerStats.playerMana -= playerStats.spellManaCost;
-
-                    // Spawn the spell prefab at the player's position
-                    GameObject spellObject = Instantiate(spellPrefab, transform.position, Quaternion.identity);
-
-                    // Determine the direction the spell should travel based on player facing
-                    int spellDirection = facingRight ? 1 : -1;
-
-                    // Set the spell's initial velocity to move in the direction the player is facing
-                    Rigidbody2D spellRB = spellObject.GetComponent<Rigidbody2D>();
-                    spellRB.velocity = new Vector2(spellSpeed * spellDirection, 0);
-
-                    // Set the spell's despawn timer
-                    Destroy(spellObject, spellDuration);
-
-                    // Start the spell cooldown
-                    spellTimer = spellCooldown;
-                }
-            }
-            else if (healHoldTime >= healHoldDuration && !Input.GetButtonUp("Spell"))
-            {
-                if (playerStats.playerMana >= 33)
-                {
-                    StartCoroutine(HealTimer());
-                }
-            }
-        }
-
-        if (spellTimer > 0)
-        {
-            // Decrease spell timer
-            spellTimer -= Time.deltaTime;
-        }
-    } */
-
     void Spell()
     {
         // Check if the player has pressed the spell button and if the spell is off cooldown
-        if (Input.GetButtonDown("Spell"))
+        if (Input.GetButtonDown("Spell") && spellTimer <= 0 && playerStats.playerMana >= 33)
         {
-            // Set the spell button down time
-            spellButtonDownTime = Time.time;
-
-            // Reset the heal button down time
-            healButtonDownTime = -2f;
-
-            Debug.Log("Spell button down at time " + spellButtonDownTime);
+            StartCoroutine(CastSpell());
         }
-        else if (Input.GetButton("Spell"))
+        else if (Input.GetButtonDown("Spell") && spellTimer <= 0 && playerStats.playerMana < 33)
         {
-            // Calculate the spell button hold time
-            float spellButtonHoldTime = Time.time - spellButtonDownTime;
-
-            if (Input.GetButtonUp("Spell") && spellButtonHoldTime < healHoldDuration)
-            {
-                if (playerStats.playerMana >= 33)
-                {
-                    // Subtract the spell mana cost from player mana
-                    playerStats.playerMana -= playerStats.spellManaCost;
-
-                    // Spawn the spell prefab at the player's position
-                    GameObject spellObject = Instantiate(spellPrefab, transform.position, Quaternion.identity);
-
-                    // Determine the direction the spell should travel based on player facing
-                    int spellDirection = facingRight ? 1 : -1;
-
-                    // Set the spell's initial velocity to move in the direction the player is facing
-                    Rigidbody2D spellRB = spellObject.GetComponent<Rigidbody2D>();
-                    spellRB.velocity = new Vector2(spellSpeed * spellDirection, 0);
-
-                    // Set the spell's despawn timer
-                    Destroy(spellObject, spellDuration);
-
-                    // Start the spell cooldown
-                    spellTimer = spellCooldown;
-
-                    Debug.Log("Cast spell at time " + Time.time);
-                }
-            }
-            else if (spellButtonHoldTime >= healHoldDuration)
-            {
-               // Calculate the heal button hold time
-                float healButtonHoldTime = Time.time - healButtonDownTime;
-                Debug.Log("Heal Button Hold Time: " + healButtonHoldTime);
-
-
-                if (healButtonHoldTime >= healHoldDuration)
-                {
-                    if (playerStats.playerMana >= 33)
-                    {
-                        StartCoroutine(HealTimer());
-
-                        Debug.Log("Started healing at time " + Time.time);
-                    }
-                }
-            }
+            Debug.Log("Player doesn't have enough mana.");
         }
 
         if (spellTimer > 0)
@@ -385,8 +281,75 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator CastSpell()
+    {
+        // Determine how long the spell button has been held down
+        float spellHoldTime = 0f;
+        while (Input.GetButton("Spell") && spellHoldTime < healThreshold)
+        {
+            spellHoldTime += Time.deltaTime;
+            yield return null;
+        }
 
+        if (spellHoldTime >= healThreshold)
+        {
+            // Start the drain over time coroutine
+            yield return StartCoroutine(DrainManaOverTime(playerStats));
 
+            // Start the spell cooldown
+            spellTimer = spellCooldown;
+        }
+        else
+        {
+            // Spawn the spell prefab at the player's position
+            GameObject spellObject = Instantiate(spellPrefab, transform.position, Quaternion.identity);
+
+            // Determine the direction the spell should travel based on player facing
+            int spellDirection = facingRight ? 1 : -1;
+
+            // Set the spell's initial velocity to move in the direction the player is facing
+            Rigidbody2D spellRB = spellObject.GetComponent<Rigidbody2D>();
+            spellRB.velocity = new Vector2(spellSpeed * spellDirection, 0);
+
+            // Set the spell's despawn timer
+            Destroy(spellObject, spellDuration);
+
+            // Start the spell cooldown
+            spellTimer = spellCooldown;
+
+            // Drain mana for the spell
+            playerStats.playerMana -= playerStats.spellManaCost;
+        }
+    }
+
+    IEnumerator DrainManaOverTime(PlayerStats playerStats)
+    {
+        // Initialize variables for mana draining
+        float manaDrained = 0f;
+        float newManaValue = playerStats.playerMana;
+
+        // Continue draining mana until the required amount has been drained
+        while (manaDrained < playerStats.spellManaCost)
+        {
+            // Calculate the new mana value based on the current rate of mana drain
+            newManaValue -= manaDrainRate * Time.deltaTime;
+
+            // Track the total amount of mana drained
+            manaDrained += manaDrainRate * Time.deltaTime;
+
+            // Update the player's mana value
+            playerStats.playerMana = newManaValue;
+
+            // Wait for the next frame
+            yield return null;
+        }
+
+        // Round the final mana value to an integer
+        playerStats.playerMana = Mathf.RoundToInt(newManaValue);
+
+        // Heal the player
+        playerStats.HealPlayer();
+    }
 
 
 
@@ -442,24 +405,4 @@ public class PlayerController : MonoBehaviour
         // Destroy the object.
         Destroy(obj);
     }
-
-    IEnumerator HealTimer()
-    {
-        // Subtract the mana cost of the heal over time
-        float elapsedTime = 0;
-        while (elapsedTime < healDuration)
-        {
-            float manaToSubtract = playerStats.healManaCost * Time.deltaTime / healDuration;
-            int manaToSubtractInt = Mathf.FloorToInt(manaToSubtract); // convert float to int
-            playerStats.playerMana -= manaToSubtractInt;
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // Apply the heal once the mana cost has been fully subtracted
-        Debug.Log("Player healed");
-
-        playerStats.HealPlayer();
-    }
-
 }

@@ -5,11 +5,11 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     public int playerHealth = 5;
-    public int maxHealth = 5;
-    public int playerAttackDamage = 10;
-    public int playerSpellDamage = 20;
-    public int playerMana = 99;
-    public int maxMana = 99;
+    public int playerMaxHealth = 5;
+    public int playerAttackDamage = 5;
+    public int playerSpellDamage = 15;
+    public float playerMana = 99f;
+    public int playerMaxMana = 99;
     public float manaRegainRate = 3.3f;
     public float invulnerabilityTime = 3f; // the duration of the invulnerability after taking damage
     public bool isInvulnerable = false; // flag to indicate if the player is currently invulnerable
@@ -22,6 +22,7 @@ public class PlayerStats : MonoBehaviour
     {
         StartCoroutine(RegainManaOverTime());
     }
+
 
     public void DamagePlayer(int damageAmount)
     {
@@ -58,10 +59,10 @@ public class PlayerStats : MonoBehaviour
     {
         while (true)
         {
-            if (playerMana < maxMana)
+            if (playerMana < playerMaxMana)
             {
                 float regainedMana = manaRegainRate * Time.deltaTime;
-                playerMana = Mathf.Min(playerMana + (int)regainedMana, maxMana);
+                playerMana = Mathf.Min(playerMana + regainedMana, playerMaxMana);
             }
             yield return null;
         }

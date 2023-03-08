@@ -37,7 +37,6 @@ public class EnemyAttackController : MonoBehaviour
             if (playerStats != null && !playerStats.isInvulnerable)
             {
                 playerStats.DamagePlayer(damage);
-                Debug.Log("Player has been hit.");
             }
         }
     }

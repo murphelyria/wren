@@ -9,7 +9,7 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
-        healthBar.fillAmount = (float)playerStats.playerHealth / playerStats.maxHealth;
-        manaBar.fillAmount = (float)playerStats.playerMana / playerStats.maxMana;
+        healthBar.fillAmount = (float)playerStats.playerHealth / playerStats.playerMaxHealth;
+        manaBar.fillAmount = playerStats.playerMana / playerStats.playerMaxMana;
     }
 }

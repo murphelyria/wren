@@ -1,0 +1,4 @@
+- Attached to MainCamera
+- Follows Player around scene
+- Currently locked to set values
+	- Want to setup a mask layer that provides a buffer for the current scene which the camera can move in, which allows greater control of where the camera is setup

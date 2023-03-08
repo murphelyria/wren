@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public static EnemyController Instance;
+
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private float sprintSpeed = 5f;
     [SerializeField] private float detectionDistanceFront = 8f;
@@ -22,6 +24,8 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        Instance = this;
+
         timeSinceLastAttack += Time.deltaTime;
 
         if (DetectPlayerFront() && !attacking)
