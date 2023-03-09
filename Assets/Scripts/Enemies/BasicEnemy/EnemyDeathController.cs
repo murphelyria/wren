@@ -6,17 +6,17 @@ public class EnemyDeathController : MonoBehaviour
     public float knockbackDuration = 0.5f;
     public float despawnDelay = 2f;
 
-    private Rigidbody2D rb2d;
+    private Rigidbody2D _rb;
     private Animator animator;
 
     private void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         // Apply knockback force
         Vector2 knockbackDirection = transform.position - PlayerController.Instance.transform.position;
         knockbackDirection.Normalize();
-        rb2d.AddForce(knockbackDirection * knockbackForce);
+        _rb.AddForce(knockbackDirection * knockbackForce);
         // Start the death animation
         // animator.SetTrigger("deathKnockback");
         // Start the despawn timer

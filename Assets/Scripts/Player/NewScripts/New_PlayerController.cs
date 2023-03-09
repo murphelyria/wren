@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class New_PlayerController : MonoBehaviour
 {
+    public static New_PlayerController instance;
+    
     private PlayerMovement playerMovement;
 
-    private float horizontalInput;
+    public float horizontalInput;
 
     public bool isInputEnabled;
+    private bool isJumpEnded;
 
     // Start is called before the first frame update
     void Start()
@@ -19,42 +22,57 @@ public class New_PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        instance = this;
+        
         if(isInputEnabled)
         {
-            moveInput();
-            jumpInput();
-            dashInput();
-            attackInput();
-            spellInput();
+            moveControl();
+            jumpControl();
+            fallControl();
+            dashControl();
+            attackControl();
+            spellControl();
         }
     }
 
-    private void moveInput() //
+    private void moveControl()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
         playerMovement.HandleMovement(horizontalInput);
     }
 
-    private void jumpInput()
+    private void jumpControl()
     {
-        if (Input.GetButton("Jump"))
+        if (Input.GetButtonDown("Jump"))
         {
             playerMovement.HandleJump();
+            PlayerStatistics.instance.hasJumped = true;
         }
     }
 
-    private void dashInput()
+    private void fallControl()
+    {
+        if (Input.GetButtonUp("Jump"))
+        {
+            playerMovement.HandleFall();
+        }
+    }
+
+    private void dashControl()
+    {
+        if (Input.GetButtonDown("Dash"))
+        {
+            playerMovement.HandleDash();
+        }
+    }
+
+    private void attackControl()
     {
 
     }
 
-    private void attackInput()
-    {
-
-    }
-
-    private void spellInput()
+    private void spellControl()
     {
 
     }

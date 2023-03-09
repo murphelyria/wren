@@ -6,8 +6,6 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D _rb;
 
-    private bool isJumpEnded;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,33 +14,65 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleMovement(float horizontalInput)
     {
-        float horizontalMovement = horizontalInput * PlayerStatistics.instance.moveSpeed;
+        if (PlayerStatistics.instance.canMove)
+        {
+            float horizontalMovement = horizontalInput * PlayerStatistics.instance.moveSpeed;
 
-        Vector2 horzMovement = new(horizontalMovement, _rb.velocity.y);
-        _rb.velocity = horzMovement;
+            Vector2 horzMovement = new(horizontalMovement, _rb.velocity.y);
+            _rb.velocity = horzMovement;
+        }
     }
 
     public void HandleJump()
     {
-        StartCoroutine(JumpTimer());
-        isJumpEnded = false;
-
-        if (!isJumpEnded)
+        if (PlayerStatistics.instance.numJumps > 0)
         {
-            Vector2 vertMovement = new(_rb.velocity.x, PlayerStatistics.instance.jumpSpeed);
-            _rb.velocity = vertMovement;
+            Vector2 jumpMovement = new(_rb.velocity.x, PlayerStatistics.instance.jumpSpeed);
+            _rb.velocity = jumpMovement;
+
+            PlayerStatistics.instance.numJumps--;
         }
     }
 
-    private IEnumerator JumpTimer()
+    public void HandleFall()
     {
-        float jumpHoldTime = 2f;
-        while (jumpHoldTime > 0f)
+        Vector2 fallMovement = new(_rb.velocity.x, -(PlayerStatistics.instance.fallSpeed));
+        _rb.velocity = fallMovement;
+    }
+
+    public void HandleDash()
+    {
+        if (PlayerStatistics.instance.canDash)
         {
-            jumpHoldTime -= Time.deltaTime;
+            float dashDirection = PlayerStatistics.instance.lastDirection.x;
+
+            StartCoroutine(DoDash(dashDirection));
+        }
+    }
+
+    private IEnumerator DoDash(float dashDirection)
+    {
+        PlayerStatistics.instance.canMove = false;
+        PlayerStatistics.instance.canDash = false;
+
+        _rb.constraints ^= RigidbodyConstraints2D.FreezePositionY;
+
+        float distanceTraveled = 0;
+        while (distanceTraveled < PlayerStatistics.instance.dashDistance)
+        {
+            float frameVelocity = dashDirection * (PlayerStatistics.instance.dashDistance * (3 * Time.deltaTime));
+            _rb.velocity = new Vector2(frameVelocity, _rb.velocity.y);
+
+            distanceTraveled += Mathf.Abs(frameVelocity);
+
             yield return null;
         }
 
-        isJumpEnded = true;
+        PlayerStatistics.instance.canMove = true;
+        _rb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+
+        yield return new WaitForSeconds(PlayerStatistics.instance.dashCooldown);
+
+        PlayerStatistics.instance.canDash = true;
     }
 }
