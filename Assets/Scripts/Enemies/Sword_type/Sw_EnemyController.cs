@@ -12,7 +12,7 @@ public class Sw_EnemyController : MonoBehaviour
     [SerializeField] private float sprintSpeed = 5f;
     [SerializeField] private float detectionDistanceFront = 8f;
     [SerializeField] private float detectionDistanceBack = 3f;
-    [SerializeField] private float attackDistance = 1f;
+    [SerializeField] private float attackDistance = 1.5f;
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private float preAttackDelay = 0.62f;
     [SerializeField] private float attackCooldown = 1f;
@@ -162,7 +162,7 @@ public class Sw_EnemyController : MonoBehaviour
     private IEnumerator AttackCoroutine()
     {
         // Get the EnemyAttackController component from the attack object
-        EnemyAttackController enemyAttackController = attackObject.GetComponent<EnemyAttackController>();
+        Sw_EnemyAttackController enemyAttackController = attackObject.GetComponent<Sw_EnemyAttackController>();
 
         // Set the direction of the attack based on which way the enemy is facing
         enemyAttackController.SetDirection(facingRight ? Vector2.right : Vector2.left);
