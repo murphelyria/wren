@@ -14,7 +14,7 @@ public class EnemyDeathController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         // Apply knockback force
-        Vector2 knockbackDirection = transform.position - PlayerController.Instance.transform.position;
+        Vector2 knockbackDirection = transform.position - PlayerController.instance.transform.position;
         knockbackDirection.Normalize();
         _rb.AddForce(knockbackDirection * knockbackForce);
         // Start the death animation

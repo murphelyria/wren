@@ -37,10 +37,10 @@ public class EnemyAttackController : MonoBehaviour
         // if the enemy is attacking and the collided object is the player
         if (isAttacking && collision.gameObject.CompareTag("Player"))
         {
-            PlayerStats playerStats = collision.gameObject.GetComponent<PlayerStats>(); // get the player's stats component
-            if (playerStats != null && !playerStats.isInvulnerable) // if the player has a stats component and is not invulnerable
+            PlayerStatistics playerStatistics = collision.gameObject.GetComponent<PlayerStatistics>(); // get the player's stats component
+            if (playerStatistics != null && !playerStatistics.isInvulnerable) // if the player has a stats component and is not invulnerable
             {
-                playerStats.DamagePlayer(damage); // damage the player
+                playerStatistics.DamagePlayer(damage); // damage the player
             }
         }
     }

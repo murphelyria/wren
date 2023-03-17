@@ -60,7 +60,7 @@ public class Sw_EnemyController : MonoBehaviour
         if (canSeePlayer && timeSinceLastAttack >= attackCooldown)
         {
             // If the player is within attack distance
-            if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= attackDistance)
+            if (Vector2.Distance(transform.position, PlayerController.instance.transform.position) <= attackDistance)
             {
                 Attack(); // Initiate an attack
             }

@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    public PlayerStats playerStats;
+    public PlayerStatistics playerStatistics;
     public Image healthBar;
     public Image manaBar;
 
     void Update()
     {
-        healthBar.fillAmount = (float)playerStats.playerHealth / playerStats.playerMaxHealth;
-        manaBar.fillAmount = playerStats.playerMana / playerStats.playerMaxMana;
+        healthBar.fillAmount = (float)playerStatistics.playerHealth / playerStatistics.playerMaxHealth;
+        manaBar.fillAmount = playerStatistics.playerMana / playerStatistics.playerMaxMana;
     }
 }
