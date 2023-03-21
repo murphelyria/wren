@@ -20,6 +20,18 @@
             }
           },
           {
+            "id": "1c62a39acb2afe3b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Lore Bible/Wren.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
             "id": "0fd98e94fdade8e9",
             "type": "leaf",
             "state": {
@@ -31,7 +43,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -158,10 +171,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "326639f70e9a1e07",
+  "active": "1c62a39acb2afe3b",
   "lastOpenFiles": [
-    "Notes/Player/Controller.md",
+    "Lore Bible/Coliseum Factions.md",
     "Lore Bible/Wren.md",
+    "Notes/Player/Controller.md",
     "Notes/Player/Character.md",
     "Projects/Add Different Enemy Types.md",
     "Projects",

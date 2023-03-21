@@ -40,6 +40,8 @@ public class PlayerStatistics : MonoBehaviour
     public int playerMaxHealth = 5;
     public bool isInvulnerable = false;
 
+    public int gold = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -108,14 +110,42 @@ public class PlayerStatistics : MonoBehaviour
         }
     }
 
-    public void DamagePlayer(int damage)
+    public void DamagePlayer(int damage, int goldPenalty)
     {
-
+        if (!isInvulnerable)
+        {
+            playerHealth -= damage;
+            if (playerHealth <= 0)
+            {
+                GameManager.instance.SetGameState(GameState.GameOver);
+            }
+            else
+            {
+                isInvulnerable = true;
+                Invoke("EndInvulnerability", 1f);
+            }
+            RemoveGold(goldPenalty);
+        }
     }
-}
 
-//      Needs a DamagePlayer() function and
-//      invulnerability periods but I don't know if
-//      that should be in PlayerStatistics or
-//      PlayerController, to allow for the knockback
-//      when touching or being hit by an enemy.
+    private void EndInvulnerability()
+    {
+        isInvulnerable = false;
+    }
+
+
+    public void AddGold(int amount)
+    {
+        gold += amount;
+    }
+
+    public void RemoveGold(int amount)
+    {
+        gold -= amount;
+        if (gold < 0)
+        {
+            gold = 0;
+        }
+    }
+
+}

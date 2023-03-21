@@ -155,6 +155,8 @@ MonoBehaviour:
   attackPrefab: {fileID: 5509171450414152552, guid: 920c5381cd31af64e859c526f5175881, type: 3}
   preAttackDelay: 0.62
   attackCooldown: 1
+  entrancePoints: []
+  entrancePointTag: EntryPoint
 --- !u!114 &3911346919608239502
 MonoBehaviour:
   m_ObjectHideFlags: 0

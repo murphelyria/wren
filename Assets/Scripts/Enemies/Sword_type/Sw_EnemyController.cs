@@ -16,14 +16,41 @@ public class Sw_EnemyController : MonoBehaviour
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private float preAttackDelay = 0.62f;
     [SerializeField] private float attackCooldown = 1f;
+    public Transform[] entrancePoints; // reference to the coliseum entrance game object
+    private Transform currentEntrancePoint; // current entrance point being targeted by the enemy
+    public string entrancePointTag; // tag of the entrance point game objects
 
     // Declare various private variables for use within the script
     private bool canSeePlayer = false;
     private bool facingRight = true;
     private bool attacking = false;
     private GameObject attackObject = null;
+    private bool leavingEntrance = true;
 
     private float timeSinceLastAttack = 0f;
+
+    private void Start()
+    {
+        // find all game objects with the entrance point tag and add their transforms to the entrancePoints array
+        GameObject[] entrancePointObjects = GameObject.FindGameObjectsWithTag(entrancePointTag);
+        entrancePoints = new Transform[entrancePointObjects.Length];
+        for (int i = 0; i < entrancePointObjects.Length; i++)
+        {
+            entrancePoints[i] = entrancePointObjects[i].transform;
+        }
+
+        // find the closest entrance point and set it as the current target
+        float shortestDistance = Mathf.Infinity;
+        foreach (Transform entrancePoint in entrancePoints)
+        {
+            float distance = Vector3.Distance(transform.position, entrancePoint.position);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                currentEntrancePoint = entrancePoint;
+            }
+        }
+    }
 
     // Define the update function that runs once per frame
     private void Update()
@@ -34,20 +61,35 @@ public class Sw_EnemyController : MonoBehaviour
         // Update the time since the last attack
         timeSinceLastAttack += Time.deltaTime;
 
-        // Check if the player is in front of the enemy and not currently attacking
-        if (DetectPlayerFront() && !attacking)
+
+        if (!leavingEntrance)
         {
-            Move(sprintSpeed); // Move the enemy towards the player at sprint speed
+            // Check if the player is in front of the enemy and not currently attacking
+            if (DetectPlayerFront() && !attacking)
+            {
+                Move(sprintSpeed); // Move the enemy towards the player at sprint speed
+            }
+            // If the player is not in front of the enemy and the enemy is not currently attacking
+            else if (!attacking)
+            {
+                Move(moveSpeed); // Move the enemy towards the player at normal speed
+            }
+            // If the enemy is currently attacking
+            else
+            {
+                Move(0f); // Stop moving
+            }
         }
-        // If the player is not in front of the enemy and the enemy is not currently attacking
-        else if (!attacking)
-        {
-            Move(moveSpeed); // Move the enemy towards the player at normal speed
-        }
-        // If the enemy is currently attacking
         else
         {
-            Move(0f); // Stop moving
+            // move the enemy towards the current entrance point
+            transform.position = Vector3.MoveTowards(transform.position, currentEntrancePoint.position, moveSpeed * Time.deltaTime);
+
+            // if the enemy has reached the current entrance point, find the next one
+            if (transform.position == currentEntrancePoint.position)
+            {
+                leavingEntrance = false;
+            }
         }
 
         // Check if there is a wall or player behind the enemy
